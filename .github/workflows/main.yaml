@@ -21,15 +21,11 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
 
-      - name: Pull from Hugging Face to prevent push conflicts
+      - name: Force Pull and Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git remote add hf https://anupamsingh9l:${HF_TOKEN}@huggingface.co/spaces/anupamsingh9l/Search_Engine_llm
-          git pull hf main --rebase
-
-      - name: Push to Hugging Face
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          git push hf main
+          git fetch hf main
+          git reset --hard origin/main  # Use GitHub version
+          git push hf main --force
